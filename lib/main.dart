@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-// controllers
-import './controllers/controllers.dart';
+// pages
+import './pages/pages.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFF424242),
       ),
-      home: const BottomNavBarController(),
+      home: const HomePage(),
     );
   }
 }
