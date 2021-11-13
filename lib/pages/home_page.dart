@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:share_plus/share_plus.dart';
 
 // widgets
 import '../widgets/widgets.dart';
@@ -51,6 +53,9 @@ class _HomePageState extends State<HomePage> {
                   // pause the scanning
                   await _qrViewController.pauseCamera();
 
+                  // give a feedback to let the user know that there is a detection
+                  HapticFeedback.heavyImpact();
+
                   // opening the modal bottom sheet
                   await showModalBottomSheet(
                     shape: const RoundedRectangleBorder(
@@ -69,10 +74,37 @@ class _HomePageState extends State<HomePage> {
                             barcode.code!,
                             normalWeight: true,
                           ),
-                          const CustomContainer(
+                          CustomContainer(
                             'COPY',
+                            onTap: () async {
+                              // copy the text
+                              await Clipboard.setData(
+                                ClipboardData(text: barcode.code!),
+                              );
+
+                              // removing snack bar if there is any before showing a new one
+                              ScaffoldMessenger.of(context)
+                                  .removeCurrentSnackBar();
+
+                              // let the user know
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Copied to clipboard!'),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+
+                              // give a haptic feedback
+                              HapticFeedback.heavyImpact();
+                            },
                           ),
-                          const CustomContainer('SHARE'),
+                          CustomContainer(
+                            'SHARE',
+                            onTap: () {
+                              HapticFeedback.heavyImpact();
+                              Share.share(barcode.code!);
+                            },
+                          ),
                           const SizedBox(
                             height: 20,
                           )
