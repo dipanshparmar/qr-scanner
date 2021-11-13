@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // widgets
 import '../widgets/widgets.dart';
@@ -73,6 +74,24 @@ class _HomePageState extends State<HomePage> {
                           CustomContainer(
                             barcode.code!,
                             normalWeight: true,
+                            onTap: () async {
+                              final bool isLaunched =
+                                  await launch(barcode.code!);
+
+                              // if isn't launched then show a snackbar
+                              if (!isLaunched) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Error opening results!',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
                           ),
                           CustomContainer(
                             'COPY',
