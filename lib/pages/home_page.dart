@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -78,18 +79,18 @@ class _HomePageState extends State<HomePage> {
                               final bool isLaunched =
                                   await launch(barcode.code!);
 
-                              // if isn't launched then show a snackbar
+                              // if isn't launched then show a flushbar
                               if (!isLaunched) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Error opening results!',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      ),
-                                    ),
+                                return Flushbar(
+                                  messageText: const Text(
+                                    'Error launching URL!',
+                                    style: TextStyle(color: Colors.red),
                                   ),
-                                );
+                                  duration: const Duration(seconds: 3),
+                                  animationDuration: const Duration(
+                                    milliseconds: 300,
+                                  ),
+                                ).show(context);
                               }
                             },
                           ),
@@ -101,20 +102,20 @@ class _HomePageState extends State<HomePage> {
                                 ClipboardData(text: barcode.code!),
                               );
 
-                              // removing snack bar if there is any before showing a new one
-                              ScaffoldMessenger.of(context)
-                                  .removeCurrentSnackBar();
-
-                              // let the user know
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Copied to clipboard!'),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-
                               // give a haptic feedback
                               HapticFeedback.heavyImpact();
+
+                              // showing the flushbar
+                              await Flushbar(
+                                messageText: const Text(
+                                  'Copied to clipboard!',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                duration: const Duration(seconds: 2),
+                                animationDuration: const Duration(
+                                  milliseconds: 300,
+                                ),
+                              ).show(context);
                             },
                           ),
                           CustomContainer(
