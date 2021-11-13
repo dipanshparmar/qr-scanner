@@ -17,7 +17,7 @@ class CustomContainer extends StatelessWidget {
       margin: const EdgeInsets.only(
         top: 20,
         right: 20,
-        left: 10,
+        left: 20,
       ),
       decoration: BoxDecoration(
         color: const Color(0xFF616161),
