@@ -68,21 +68,8 @@ class _HomePageState extends State<HomePage> {
                           barcode.code!,
                           normalWeight: true,
                         ),
-                        Row(
-                          children: const [
-                            Expanded(
-                              child: CustomContainer(
-                                'COPY',
-                                right: 10,
-                              ),
-                            ),
-                            Expanded(
-                              child: CustomContainer(
-                                'SAVE',
-                                left: 10,
-                              ),
-                            ),
-                          ],
+                        const CustomContainer(
+                          'COPY',
                         ),
                         const CustomContainer('SHARE'),
                         const SizedBox(
