@@ -6,11 +6,15 @@ class CustomContainer extends StatelessWidget {
     Key? key,
     this.normalWeight = false,
     this.onTap,
+    this.right,
+    this.left,
   }) : super(key: key);
 
   final String _text;
   final bool normalWeight;
   final Function()? onTap;
+  final double? right;
+  final double? left;
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +22,10 @@ class CustomContainer extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
-        margin: const EdgeInsets.only(
+        margin: EdgeInsets.only(
           top: 20,
-          right: 20,
-          left: 20,
+          right: right ?? 20,
+          left: left ?? 20,
         ),
         decoration: BoxDecoration(
           color: const Color(0xFF616161),

@@ -1,9 +1,13 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+// providers
+import '../providers/providers.dart';
 
 // widgets
 import '../widgets/widgets.dart';
@@ -25,12 +29,16 @@ class _HomePageState extends State<HomePage> {
   // controller for the scanner
   late QRViewController _qrViewController;
 
+  // controller for the text field
+  final TextEditingController _textEditingController = TextEditingController();
+
   @override
   void dispose() {
     super.dispose();
 
-    // disposeing the controller
+    // disposing the controllers
     _qrViewController.dispose();
+    _textEditingController.dispose();
   }
 
   @override
@@ -94,29 +102,117 @@ class _HomePageState extends State<HomePage> {
                               }
                             },
                           ),
-                          CustomContainer(
-                            'COPY',
-                            onTap: () async {
-                              // copy the text
-                              await Clipboard.setData(
-                                ClipboardData(text: barcode.code!),
-                              );
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomContainer(
+                                  'COPY',
+                                  right: 10,
+                                  onTap: () async {
+                                    // copy the text
+                                    await Clipboard.setData(
+                                      ClipboardData(text: barcode.code!),
+                                    );
 
-                              // give a haptic feedback
-                              HapticFeedback.heavyImpact();
+                                    // give a haptic feedback
+                                    HapticFeedback.heavyImpact();
 
-                              // showing the flushbar
-                              await Flushbar(
-                                messageText: const Text(
-                                  'Copied to clipboard!',
-                                  style: TextStyle(color: Colors.white),
+                                    // showing the flushbar
+                                    await Flushbar(
+                                      messageText: const Text(
+                                        'Copied to clipboard!',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      duration: const Duration(seconds: 2),
+                                      animationDuration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                    ).show(context);
+                                  },
                                 ),
-                                duration: const Duration(seconds: 2),
-                                animationDuration: const Duration(
-                                  milliseconds: 300,
+                              ),
+                              Expanded(
+                                child: CustomContainer(
+                                  'SAVE',
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(5),
+                                          topRight: Radius.circular(5),
+                                        ),
+                                      ),
+                                      clipBehavior: Clip.antiAlias,
+                                      context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) {
+                                        return Padding(
+                                          padding:
+                                              MediaQuery.of(context).viewInsets,
+                                          child: TextField(
+                                            controller: _textEditingController,
+                                            cursorColor: Colors.white70,
+                                            autofocus: true,
+                                            textCapitalization:
+                                                TextCapitalization.sentences,
+                                            decoration: InputDecoration(
+                                              fillColor:
+                                                  const Color(0xFF616161),
+                                              filled: true,
+                                              contentPadding:
+                                                  const EdgeInsets.all(25),
+                                              border: InputBorder.none,
+                                              hintText:
+                                                  'Enter a title to remember your scan',
+                                              hintStyle: const TextStyle(
+                                                color: Colors.white70,
+                                              ),
+                                              suffixIcon: IconButton(
+                                                  icon: const Icon(
+                                                    Icons.send_rounded,
+                                                  ),
+                                                  color: Colors.white,
+                                                  onPressed: () {
+                                                    Provider.of<SavedScansProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .setData(
+                                                      {
+                                                        'id': UniqueKey()
+                                                            .toString(),
+                                                        'title':
+                                                            _textEditingController
+                                                                .text,
+                                                        'code': barcode.code!,
+                                                        'date': DateTime.now()
+                                                            .toString(),
+                                                      },
+                                                    );
+
+                                                    // clering the value of the controller
+                                                    _textEditingController
+                                                        .clear();
+
+                                                    // closing the keyboard and popping the current screen
+                                                    FocusScope.of(context)
+                                                        .unfocus();
+                                                    Navigator.pop(context);
+                                                  }),
+                                            ),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                            textInputAction:
+                                                TextInputAction.none,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  left: 10,
                                 ),
-                              ).show(context);
-                            },
+                              )
+                            ],
                           ),
                           CustomContainer(
                             'SHARE',
