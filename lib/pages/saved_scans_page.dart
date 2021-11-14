@@ -59,7 +59,7 @@ class _SavedScansPageState extends State<SavedScansPage> {
           } else {
             // if error
             if (snapshot.hasError) {
-              return _buildErrorText(); // TODO: TEST THIS
+              return _buildErrorText();
             } else {
               return SafeArea(
                 child: Consumer<SavedScansProvider>(
