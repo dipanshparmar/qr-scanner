@@ -1,0 +1,4 @@
+enum ModalBottomSheetType {
+  save,
+  delete,
+}
