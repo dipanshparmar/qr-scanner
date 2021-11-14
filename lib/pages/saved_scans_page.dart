@@ -211,6 +211,7 @@ class _SavedScansPageState extends State<SavedScansPage> {
     );
   }
 
+  // method to build the modal bottom sheet
   _buildModalBottomSheet(BuildContext context, SavedScan savedScan) async {
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
@@ -222,212 +223,234 @@ class _SavedScansPageState extends State<SavedScansPage> {
       backgroundColor: Theme.of(context).primaryColor,
       context: context,
       builder: (context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CustomContainer(
-              savedScan.title == '' ? 'No title!' : savedScan.title,
-              onTap: () {
-                showModalBottomSheet(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(5),
-                      topRight: Radius.circular(5),
-                    ),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) {
-                    return Container(
-                      color: const Color(0xFF616161),
-                      child: Padding(
-                        padding: MediaQuery.of(context).viewInsets,
-                        child: TextField(
-                          maxLength: 80,
-                          focusNode: _focusNode,
-                          textAlignVertical: TextAlignVertical.center,
-                          controller: _textEditingController
-                            ..text = savedScan.title
-                            ..selection = _focusNode.hasFocus
-                                ? TextSelection(
-                                    baseOffset: 0,
-                                    extentOffset: savedScan.title.length,
-                                  )
-                                : const TextSelection(
-                                    baseOffset: 0,
-                                    extentOffset: 0,
-                                  ),
-                          cursorColor: Colors.white70,
-                          autofocus: true,
-                          textCapitalization: TextCapitalization.sentences,
-                          decoration: InputDecoration(
-                            counterStyle: const TextStyle(
-                              color: Colors.white70,
-                            ),
-                            fillColor: const Color(0xFF616161),
-                            filled: true,
-                            contentPadding: const EdgeInsets.all(25),
-                            border: InputBorder.none,
-                            hintText: 'Enter a new title',
-                            hintStyle: const TextStyle(
-                              color: Colors.white70,
-                            ),
-                            suffixIcon: IconButton(
-                                icon: const Icon(
-                                  Icons.send_rounded,
-                                ),
-                                color: Colors.white,
-                                onPressed: () {
-                                  Provider.of<SavedScansProvider>(context,
-                                          listen: false)
-                                      .update(
-                                    {
-                                      'id': savedScan.id,
-                                      'title': _textEditingController.text,
-                                      'code': savedScan.code,
-                                      'date': savedScan.date,
-                                    },
-                                  );
+        return _buildOptions(savedScan, context);
+      },
+    );
+  }
 
-                                  // clering the value of the controller
-                                  _textEditingController.clear();
+  // method to build the options
+  Widget _buildOptions(SavedScan savedScan, BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // title container
+        CustomContainer(
+          savedScan.title == '' ? 'No title!' : savedScan.title,
+          onTap: () async {
+            await _buildUpdateTitleBottomSheet(context, savedScan);
+          },
+        ),
 
-                                  // closing the keyboard and popping the current screen
-                                  FocusScope.of(context).unfocus();
-                                  Navigator.pop(context);
-                                }),
-                          ),
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                          textInputAction: TextInputAction.none,
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-            CustomContainer(
-              savedScan.code,
-              normalWeight: true,
-              onTap: () async {
-                final bool isLaunched = await launch(savedScan.code);
+        // code container
+        CustomContainer(
+          savedScan.code,
+          normalWeight: true,
+          onTap: () => _launchUrl(savedScan.code),
+          maxLines: 10,
+        ),
 
-                // if isn't launched then show a flushbar
-                if (!isLaunched) {
-                  return Flushbar(
-                    messageText: const Text(
-                      'Error launching URL!',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    duration: const Duration(seconds: 3),
-                    animationDuration: const Duration(
-                      milliseconds: 300,
-                    ),
-                  ).show(context);
-                }
-              },
-              maxLines: 10,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: CustomContainer(
-                    'COPY',
-                    rightPadding: 10,
-                    onTap: () async {
-                      // copy the text
-                      await Clipboard.setData(
-                        ClipboardData(
-                          text: savedScan.code,
-                        ),
-                      );
+        // buttons' row
+        _buildButtonsRow(savedScan, context),
 
-                      // give a haptic feedback
-                      HapticFeedback.heavyImpact();
+        // delete button
+        CustomContainer(
+          'DELETE',
+          onTap: () async => _deleteScan(savedScan.id),
+        ),
+        const SizedBox(
+          height: 20,
+        )
+      ],
+    );
+  }
 
-                      // showing the flushbar
-                      await Flushbar(
-                        messageText: const Text(
-                          'Copied to clipboard!',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        duration: const Duration(seconds: 2),
-                        animationDuration: const Duration(
-                          milliseconds: 300,
-                        ),
-                      ).show(context);
-                    },
-                  ),
+  // method to build the buttons row
+  Widget _buildButtonsRow(SavedScan savedScan, BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: CustomContainer(
+            'COPY',
+            rightPadding: 10,
+            onTap: () async {
+              // copy the text
+              await Clipboard.setData(
+                ClipboardData(
+                  text: savedScan.code,
                 ),
-                Expanded(
-                  child: CustomContainer(
-                    'DELETE',
-                    onTap: () async {
-                      // ask the user if he really wants to delete the scan info
-                      final deleteIt = await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            title: const Text(
-                              'Are you sure?',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            content: const Text(
-                              'This action is irreversible.',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            actions: [
-                              TextButton(
-                                child: const Text('No'),
-                                onPressed: () {
-                                  Navigator.pop(context, false);
-                                },
-                              ),
-                              TextButton(
-                                child: const Text('Yes'),
-                                onPressed: () {
-                                  Navigator.pop(context, true);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
+              );
 
-                      if (deleteIt) {
-                        await Provider.of<SavedScansProvider>(
-                          context,
-                          listen: false,
-                        ).delete(savedScan.id);
+              // give a haptic feedback
+              HapticFeedback.heavyImpact();
 
-                        // pop the bottom sheet
-                        Navigator.pop(context);
-                      }
-                    },
-                    leftPadding: 10,
-                  ),
-                )
-              ],
+              // showing the flushbar
+              await Flushbar(
+                messageText: const Text(
+                  'Copied to clipboard!',
+                  style: TextStyle(color: Colors.white),
+                ),
+                duration: const Duration(seconds: 2),
+                animationDuration: const Duration(
+                  milliseconds: 300,
+                ),
+              ).show(context);
+            },
+          ),
+        ),
+        Expanded(
+          child: CustomContainer(
+            'SHARE',
+            onTap: () async {
+              HapticFeedback.heavyImpact();
+              Share.share(savedScan.code);
+            },
+            leftPadding: 10,
+          ),
+        )
+      ],
+    );
+  }
+
+  // method to delete a scan
+  Future<void> _deleteScan(String id) async {
+    // ask the user if he really wants to delete the scan info
+    final deleteIt = await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).primaryColor,
+          title: const Text(
+            'Are you sure?',
+            style: TextStyle(
+              color: Colors.white,
             ),
-            CustomContainer(
-              'SHARE',
-              onTap: () {
-                HapticFeedback.heavyImpact();
-                Share.share(savedScan.code);
+          ),
+          content: const Text(
+            'This action is irreversible.',
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: [
+            TextButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.pop(context, false);
               },
             ),
-            const SizedBox(
-              height: 20,
-            )
+            TextButton(
+              child: const Text('Yes'),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
           ],
         );
       },
     );
+
+    if (deleteIt) {
+      await Provider.of<SavedScansProvider>(
+        context,
+        listen: false,
+      ).delete(id);
+
+      // pop the bottom sheet
+      Navigator.pop(context);
+    }
+  }
+
+  // method to launch the url
+  void _launchUrl(String code) async {
+    await launch(code);
+  }
+
+  // method to build the update title bottom sheet
+  Future<dynamic> _buildUpdateTitleBottomSheet(
+      BuildContext context, SavedScan savedScan) {
+    return showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(5),
+          topRight: Radius.circular(5),
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          color: const Color(0xFF616161),
+          child: Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: _buildTitleTextField(savedScan, context),
+          ),
+        );
+      },
+    );
+  }
+
+  // method to build the text field to update the title
+  TextField _buildTitleTextField(SavedScan savedScan, BuildContext context) {
+    return TextField(
+      maxLength: 80,
+      focusNode: _focusNode,
+      textAlignVertical: TextAlignVertical.center,
+      controller: _textEditingController
+        ..text = savedScan.title
+        ..selection = _focusNode.hasFocus
+            ? TextSelection(
+                baseOffset: 0,
+                extentOffset: savedScan.title.length,
+              )
+            : const TextSelection(
+                baseOffset: 0,
+                extentOffset: 0,
+              ),
+      cursorColor: Colors.white70,
+      autofocus: true,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(
+        counterStyle: const TextStyle(
+          color: Colors.white70,
+        ),
+        fillColor: const Color(0xFF616161),
+        filled: true,
+        contentPadding: const EdgeInsets.all(25),
+        border: InputBorder.none,
+        hintText: 'Enter a new title',
+        hintStyle: const TextStyle(
+          color: Colors.white70,
+        ),
+        suffixIcon: IconButton(
+          icon: const Icon(
+            Icons.send_rounded,
+          ),
+          color: Colors.white,
+          onPressed: () async => _updateTitle(savedScan),
+        ),
+      ),
+      style: const TextStyle(
+        color: Colors.white,
+      ),
+      textInputAction: TextInputAction.none,
+    );
+  }
+
+  // method to update the scan title
+  Future<void> _updateTitle(SavedScan savedScan) async {
+    Provider.of<SavedScansProvider>(context, listen: false).update(
+      {
+        'id': savedScan.id,
+        'title': _textEditingController.text,
+        'code': savedScan.code,
+        'date': savedScan.date,
+      },
+    );
+
+    // clering the value of the controller
+    _textEditingController.clear();
+
+    // closing the keyboard and popping the current screen
+    FocusScope.of(context).unfocus();
+    Navigator.pop(context);
   }
 }
