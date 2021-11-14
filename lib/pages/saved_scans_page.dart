@@ -363,7 +363,7 @@ class _SavedScansPageState extends State<SavedScansPage> {
                   ).show(context);
                 }
               },
-              maxLines: 5,
+              maxLines: 10,
             ),
             Row(
               children: [

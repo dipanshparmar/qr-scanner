@@ -85,6 +85,7 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           CustomContainer(
                             barcode.code!,
+                            maxLines: 10,
                             normalWeight: true,
                             onTap: () async {
                               final bool isLaunched =
