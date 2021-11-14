@@ -22,7 +22,7 @@ class SavedScanTile extends StatelessWidget {
         bottom: 20,
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF878787),
+        color: const Color(0xFF5C5C5C),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
