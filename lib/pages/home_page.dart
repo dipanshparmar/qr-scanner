@@ -155,6 +155,7 @@ class _HomePageState extends State<HomePage> {
                                             padding: MediaQuery.of(context)
                                                 .viewInsets,
                                             child: TextField(
+                                              maxLength: 80,
                                               controller:
                                                   _textEditingController,
                                               cursorColor: Colors.white70,
@@ -162,6 +163,9 @@ class _HomePageState extends State<HomePage> {
                                               textCapitalization:
                                                   TextCapitalization.sentences,
                                               decoration: InputDecoration(
+                                                counterStyle: const TextStyle(
+                                                  color: Colors.white70,
+                                                ),
                                                 fillColor:
                                                     const Color(0xFF616161),
                                                 filled: true,

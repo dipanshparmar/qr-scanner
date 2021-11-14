@@ -8,6 +8,7 @@ class CustomContainer extends StatelessWidget {
     this.onTap,
     this.right,
     this.left,
+    this.maxLines,
   }) : super(key: key);
 
   final String _text;
@@ -15,6 +16,7 @@ class CustomContainer extends StatelessWidget {
   final Function()? onTap;
   final double? right;
   final double? left;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +36,8 @@ class CustomContainer extends StatelessWidget {
         child: Center(
           child: Text(
             _text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            maxLines: maxLines,
+            overflow: maxLines != null ? TextOverflow.ellipsis : null,
             style: TextStyle(
               color: Colors.white,
               fontWeight: normalWeight ? FontWeight.normal : FontWeight.bold,

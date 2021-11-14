@@ -191,8 +191,6 @@ class _SavedScansPageState extends State<SavedScansPage> {
                                           fontWeight: FontWeight.w600,
                                           color: Colors.white70,
                                         ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
                                       ),
 
                                       const SizedBox(
@@ -203,18 +201,16 @@ class _SavedScansPageState extends State<SavedScansPage> {
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
                                         children: [
                                           Expanded(
                                             child: Text(
                                               savedScan.code,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 13,
                                               ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
                                           Text(
@@ -282,6 +278,7 @@ class _SavedScansPageState extends State<SavedScansPage> {
                       child: Padding(
                         padding: MediaQuery.of(context).viewInsets,
                         child: TextField(
+                          maxLength: 80,
                           focusNode: _focusNode,
                           textAlignVertical: TextAlignVertical.center,
                           controller: _textEditingController
@@ -299,6 +296,9 @@ class _SavedScansPageState extends State<SavedScansPage> {
                           autofocus: true,
                           textCapitalization: TextCapitalization.sentences,
                           decoration: InputDecoration(
+                            counterStyle: const TextStyle(
+                              color: Colors.white70,
+                            ),
                             fillColor: const Color(0xFF616161),
                             filled: true,
                             contentPadding: const EdgeInsets.all(25),
@@ -363,6 +363,7 @@ class _SavedScansPageState extends State<SavedScansPage> {
                   ).show(context);
                 }
               },
+              maxLines: 5,
             ),
             Row(
               children: [
