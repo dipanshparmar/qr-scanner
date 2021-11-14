@@ -149,64 +149,68 @@ class _HomePageState extends State<HomePage> {
                                       context: context,
                                       isScrollControlled: true,
                                       builder: (context) {
-                                        return Padding(
-                                          padding:
-                                              MediaQuery.of(context).viewInsets,
-                                          child: TextField(
-                                            controller: _textEditingController,
-                                            cursorColor: Colors.white70,
-                                            autofocus: true,
-                                            textCapitalization:
-                                                TextCapitalization.sentences,
-                                            decoration: InputDecoration(
-                                              fillColor:
-                                                  const Color(0xFF616161),
-                                              filled: true,
-                                              contentPadding:
-                                                  const EdgeInsets.all(25),
-                                              border: InputBorder.none,
-                                              hintText:
-                                                  'Enter a title to remember your scan',
-                                              hintStyle: const TextStyle(
-                                                color: Colors.white70,
+                                        return Container(
+                                          color: const Color(0xFF616161),
+                                          child: Padding(
+                                            padding: MediaQuery.of(context)
+                                                .viewInsets,
+                                            child: TextField(
+                                              controller:
+                                                  _textEditingController,
+                                              cursorColor: Colors.white70,
+                                              autofocus: true,
+                                              textCapitalization:
+                                                  TextCapitalization.sentences,
+                                              decoration: InputDecoration(
+                                                fillColor:
+                                                    const Color(0xFF616161),
+                                                filled: true,
+                                                contentPadding:
+                                                    const EdgeInsets.all(25),
+                                                border: InputBorder.none,
+                                                hintText:
+                                                    'Enter a title to remember your scan',
+                                                hintStyle: const TextStyle(
+                                                  color: Colors.white70,
+                                                ),
+                                                suffixIcon: IconButton(
+                                                    icon: const Icon(
+                                                      Icons.send_rounded,
+                                                    ),
+                                                    color: Colors.white,
+                                                    onPressed: () {
+                                                      Provider.of<SavedScansProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .setData(
+                                                        {
+                                                          'id': UniqueKey()
+                                                              .toString(),
+                                                          'title':
+                                                              _textEditingController
+                                                                  .text,
+                                                          'code': barcode.code!,
+                                                          'date':
+                                                              date, // this date is from the first modal bottom sheet
+                                                        },
+                                                      );
+
+                                                      // clering the value of the controller
+                                                      _textEditingController
+                                                          .clear();
+
+                                                      // closing the keyboard and popping the current screen
+                                                      FocusScope.of(context)
+                                                          .unfocus();
+                                                      Navigator.pop(context);
+                                                    }),
                                               ),
-                                              suffixIcon: IconButton(
-                                                  icon: const Icon(
-                                                    Icons.send_rounded,
-                                                  ),
-                                                  color: Colors.white,
-                                                  onPressed: () {
-                                                    Provider.of<SavedScansProvider>(
-                                                            context,
-                                                            listen: false)
-                                                        .setData(
-                                                      {
-                                                        'id': UniqueKey()
-                                                            .toString(),
-                                                        'title':
-                                                            _textEditingController
-                                                                .text,
-                                                        'code': barcode.code!,
-                                                        'date':
-                                                            date, // this date is from the first modal bottom sheet
-                                                      },
-                                                    );
-
-                                                    // clering the value of the controller
-                                                    _textEditingController
-                                                        .clear();
-
-                                                    // closing the keyboard and popping the current screen
-                                                    FocusScope.of(context)
-                                                        .unfocus();
-                                                    Navigator.pop(context);
-                                                  }),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                              textInputAction:
+                                                  TextInputAction.none,
                                             ),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                            textInputAction:
-                                                TextInputAction.none,
                                           ),
                                         );
                                       },

@@ -277,63 +277,66 @@ class _SavedScansPageState extends State<SavedScansPage> {
                   context: context,
                   isScrollControlled: true,
                   builder: (context) {
-                    return Padding(
-                      padding: MediaQuery.of(context).viewInsets,
-                      child: TextField(
-                        focusNode: _focusNode,
-                        textAlignVertical: TextAlignVertical.center,
-                        controller: _textEditingController
-                          ..text = savedScan.title
-                          ..selection = _focusNode.hasFocus
-                              ? TextSelection(
-                                  baseOffset: 0,
-                                  extentOffset: savedScan.title.length,
-                                )
-                              : const TextSelection(
-                                  baseOffset: 0,
-                                  extentOffset: 0,
+                    return Container(
+                      color: const Color(0xFF616161),
+                      child: Padding(
+                        padding: MediaQuery.of(context).viewInsets,
+                        child: TextField(
+                          focusNode: _focusNode,
+                          textAlignVertical: TextAlignVertical.center,
+                          controller: _textEditingController
+                            ..text = savedScan.title
+                            ..selection = _focusNode.hasFocus
+                                ? TextSelection(
+                                    baseOffset: 0,
+                                    extentOffset: savedScan.title.length,
+                                  )
+                                : const TextSelection(
+                                    baseOffset: 0,
+                                    extentOffset: 0,
+                                  ),
+                          cursorColor: Colors.white70,
+                          autofocus: true,
+                          textCapitalization: TextCapitalization.sentences,
+                          decoration: InputDecoration(
+                            fillColor: const Color(0xFF616161),
+                            filled: true,
+                            contentPadding: const EdgeInsets.all(25),
+                            border: InputBorder.none,
+                            hintText: 'Enter a new title',
+                            hintStyle: const TextStyle(
+                              color: Colors.white70,
+                            ),
+                            suffixIcon: IconButton(
+                                icon: const Icon(
+                                  Icons.send_rounded,
                                 ),
-                        cursorColor: Colors.white70,
-                        autofocus: true,
-                        textCapitalization: TextCapitalization.sentences,
-                        decoration: InputDecoration(
-                          fillColor: const Color(0xFF616161),
-                          filled: true,
-                          contentPadding: const EdgeInsets.all(25),
-                          border: InputBorder.none,
-                          hintText: 'Enter a new title',
-                          hintStyle: const TextStyle(
-                            color: Colors.white70,
+                                color: Colors.white,
+                                onPressed: () {
+                                  Provider.of<SavedScansProvider>(context,
+                                          listen: false)
+                                      .update(
+                                    {
+                                      'id': savedScan.id,
+                                      'title': _textEditingController.text,
+                                      'code': savedScan.code,
+                                      'date': savedScan.date,
+                                    },
+                                  );
+
+                                  // clering the value of the controller
+                                  _textEditingController.clear();
+
+                                  // closing the keyboard and popping the current screen
+                                  FocusScope.of(context).unfocus();
+                                  Navigator.pop(context);
+                                }),
                           ),
-                          suffixIcon: IconButton(
-                              icon: const Icon(
-                                Icons.send_rounded,
-                              ),
-                              color: Colors.white,
-                              onPressed: () {
-                                Provider.of<SavedScansProvider>(context,
-                                        listen: false)
-                                    .update(
-                                  {
-                                    'id': savedScan.id,
-                                    'title': _textEditingController.text,
-                                    'code': savedScan.code,
-                                    'date': savedScan.date,
-                                  },
-                                );
-
-                                // clering the value of the controller
-                                _textEditingController.clear();
-
-                                // closing the keyboard and popping the current screen
-                                FocusScope.of(context).unfocus();
-                                Navigator.pop(context);
-                              }),
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                          textInputAction: TextInputAction.none,
                         ),
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                        textInputAction: TextInputAction.none,
                       ),
                     );
                   },
