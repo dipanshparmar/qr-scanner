@@ -26,11 +26,25 @@ class _SavedScansPageState extends State<SavedScansPage> {
   // future that will hold the future that will load the saved scans
   late Future _future;
 
+  // text editing controller for the update title textfield
+  final _textEditingController = TextEditingController();
+
+  // focus node for the edit title text field
+  final FocusNode _focusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
     _future = Provider.of<SavedScansProvider>(context, listen: false)
         .fetchSavedScans(); // fetching the data from the db
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    // disposing the controller
+    _textEditingController.dispose();
   }
 
   @override
@@ -149,7 +163,9 @@ class _SavedScansPageState extends State<SavedScansPage> {
                               return GestureDetector(
                                 onTap: () async {
                                   await _buildModalBottomSheet(
-                                      context, savedScan);
+                                    context,
+                                    savedScan,
+                                  );
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
@@ -247,6 +263,83 @@ class _SavedScansPageState extends State<SavedScansPage> {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            CustomContainer(
+              savedScan.title == '' ? 'No title!' : savedScan.title,
+              onTap: () {
+                showModalBottomSheet(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5),
+                      topRight: Radius.circular(5),
+                    ),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) {
+                    return Padding(
+                      padding: MediaQuery.of(context).viewInsets,
+                      child: TextField(
+                        focusNode: _focusNode,
+                        textAlignVertical: TextAlignVertical.center,
+                        controller: _textEditingController
+                          ..text = savedScan.title
+                          ..selection = _focusNode.hasFocus
+                              ? TextSelection(
+                                  baseOffset: 0,
+                                  extentOffset: savedScan.title.length,
+                                )
+                              : const TextSelection(
+                                  baseOffset: 0,
+                                  extentOffset: 0,
+                                ),
+                        cursorColor: Colors.white70,
+                        autofocus: true,
+                        textCapitalization: TextCapitalization.sentences,
+                        decoration: InputDecoration(
+                          fillColor: const Color(0xFF616161),
+                          filled: true,
+                          contentPadding: const EdgeInsets.all(25),
+                          border: InputBorder.none,
+                          hintText: 'Enter a new title',
+                          hintStyle: const TextStyle(
+                            color: Colors.white70,
+                          ),
+                          suffixIcon: IconButton(
+                              icon: const Icon(
+                                Icons.send_rounded,
+                              ),
+                              color: Colors.white,
+                              onPressed: () {
+                                Provider.of<SavedScansProvider>(context,
+                                        listen: false)
+                                    .update(
+                                  {
+                                    'id': savedScan.id,
+                                    'title': _textEditingController.text,
+                                    'code': savedScan.code,
+                                    'date': savedScan.date,
+                                  },
+                                );
+
+                                // clering the value of the controller
+                                _textEditingController.clear();
+
+                                // closing the keyboard and popping the current screen
+                                FocusScope.of(context).unfocus();
+                                Navigator.pop(context);
+                              }),
+                        ),
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        textInputAction: TextInputAction.none,
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
             CustomContainer(
               savedScan.code,
               normalWeight: true,

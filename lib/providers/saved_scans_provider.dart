@@ -84,4 +84,17 @@ class SavedScansProvider with ChangeNotifier {
     // notifying the listeners
     notifyListeners();
   }
+
+  // method to update the data (the title)
+  Future<void> update(Map<String, dynamic> data) async {
+    // updating in the database
+    await SavedScansDb.update(data);
+
+    // updating in the list
+    final index = _savedScans.indexWhere((element) => element.id == data['id']);
+    _savedScans[index].title = data['title'];
+
+    // notifying the listeners
+    notifyListeners();
+  }
 }

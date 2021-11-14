@@ -46,6 +46,16 @@ class SavedScansDb {
     // getting the db
     final db = await database();
 
+    // deleting
     db.delete('scans');
+  }
+
+  // static method to update the data
+  static Future<void> update(Map<String, dynamic> data) async {
+    // getting the db
+    final db = await database();
+
+    // updating
+    db.update('scans', data, where: 'id = ?', whereArgs: [data['id']]);
   }
 }
