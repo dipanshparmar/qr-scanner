@@ -22,6 +22,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: const Color(0xFF424242),
+          textSelectionTheme: const TextSelectionThemeData(
+            selectionColor: Color(0xFF424242),
+            selectionHandleColor: Color(0xFF212121),
+          ),
         ),
         home: const BottomNavBarController(),
       ),
