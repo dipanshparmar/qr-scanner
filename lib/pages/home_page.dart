@@ -66,6 +66,9 @@ class _HomePageState extends State<HomePage> {
                   // give a feedback to let the user know that there is a detection
                   HapticFeedback.heavyImpact();
 
+                  // getting the captured date
+                  final date = DateTime.now().toString();
+
                   // opening the modal bottom sheet
                   await showModalBottomSheet(
                     shape: const RoundedRectangleBorder(
@@ -184,8 +187,8 @@ class _HomePageState extends State<HomePage> {
                                                             _textEditingController
                                                                 .text,
                                                         'code': barcode.code!,
-                                                        'date': DateTime.now()
-                                                            .toString(),
+                                                        'date':
+                                                            date, // this date is from the first modal bottom sheet
                                                       },
                                                     );
 
