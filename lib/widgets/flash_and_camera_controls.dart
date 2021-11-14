@@ -8,7 +8,7 @@ class FlashAndCameraControls extends StatefulWidget {
   }) : super(key: key);
 
   // qr view controller to control the flash and the camera
-  final QRViewController _qrViewController;
+  final QRViewController? _qrViewController;
 
   @override
   State<FlashAndCameraControls> createState() => _FlashAndCameraControlsState();
@@ -64,29 +64,35 @@ class _FlashAndCameraControlsState extends State<FlashAndCameraControls> {
 
   // method to toggle flash
   Future<void> _toggleFlash() async {
-    // toggle the flash
-    await widget._qrViewController.toggleFlash();
+    // if controller is not null
+    if (widget._qrViewController != null) {
+      // toggle the flash
+      await widget._qrViewController!.toggleFlash();
 
-    // getting the status of the flash
-    final bool? isOn = await widget._qrViewController.getFlashStatus();
+      // getting the status of the flash
+      final bool? isOn = await widget._qrViewController!.getFlashStatus();
 
-    // updating the icon
-    if (isOn != null) {
-      if (isOn) {
-        setState(() {
-          _flashIcon = Icons.flashlight_on;
-        });
-      } else {
-        setState(() {
-          _flashIcon = Icons.flashlight_off;
-        });
+      // updating the icon
+      if (isOn != null) {
+        if (isOn) {
+          setState(() {
+            _flashIcon = Icons.flashlight_on;
+          });
+        } else {
+          setState(() {
+            _flashIcon = Icons.flashlight_off;
+          });
+        }
       }
     }
   }
 
   // method to toggle the camera
   Future<void> _toggleCamera() async {
-    // flip the camera
-    await widget._qrViewController.flipCamera();
+    // if controller is not null
+    if (widget._qrViewController != null) {
+      // flip the camera
+      await widget._qrViewController!.flipCamera();
+    }
   }
 }

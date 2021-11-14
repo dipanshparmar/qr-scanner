@@ -17,14 +17,16 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
 
   // controller for the scanner
-  late QRViewController _qrViewController;
+  QRViewController? _qrViewController;
 
   @override
   void dispose() {
     super.dispose();
 
     // disposing the controllers
-    _qrViewController.dispose();
+    if (_qrViewController != null) {
+      _qrViewController!.dispose();
+    }
   }
 
   @override
@@ -45,10 +47,10 @@ class _HomePageState extends State<HomePage> {
               _qrViewController = controller;
 
               // listening for detection
-              _qrViewController.scannedDataStream.listen(
+              _qrViewController!.scannedDataStream.listen(
                 (barcode) async {
                   // pause the scanning
-                  await _qrViewController.pauseCamera();
+                  await _qrViewController!.pauseCamera();
 
                   // give a feedback to let the user know that there is a detection
                   HapticFeedback.heavyImpact();
@@ -75,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                   );
 
                   // once the sheet is closed resume the camera again
-                  await _qrViewController.resumeCamera();
+                  await _qrViewController!.resumeCamera();
                 },
               );
             },
