@@ -190,13 +190,15 @@ class _SavedScansPageState extends State<SavedScansPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            savedScan.code,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 13,
+                                          Expanded(
+                                            child: Text(
+                                              savedScan.code,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 13,
+                                              ),
                                             ),
                                           ),
                                           Text(
