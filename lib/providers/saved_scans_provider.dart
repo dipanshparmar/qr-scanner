@@ -34,8 +34,8 @@ class SavedScansProvider with ChangeNotifier {
     }
   }
 
-  // method to set the data
-  Future<void> setData(Map<String, dynamic> data) async {
+  // method to insert the data
+  Future<void> insert(Map<String, dynamic> data) async {
     // passing the data to the database
     await SavedScansDb.insert(data);
 
@@ -90,8 +90,10 @@ class SavedScansProvider with ChangeNotifier {
     // updating in the database
     await SavedScansDb.update(data);
 
-    // updating in the list
+    // getting the index of the scan that needs to be updated
     final index = _savedScans.indexWhere((element) => element.id == data['id']);
+
+    // updating the title at that index
     _savedScans[index].title = data['title'];
 
     // notifying the listeners

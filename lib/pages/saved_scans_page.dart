@@ -370,7 +370,7 @@ class _SavedScansPageState extends State<SavedScansPage> {
                 Expanded(
                   child: CustomContainer(
                     'COPY',
-                    right: 10,
+                    rightPadding: 10,
                     onTap: () async {
                       // copy the text
                       await Clipboard.setData(
@@ -443,7 +443,7 @@ class _SavedScansPageState extends State<SavedScansPage> {
                         Navigator.pop(context);
                       }
                     },
-                    left: 10,
+                    leftPadding: 10,
                   ),
                 )
               ],

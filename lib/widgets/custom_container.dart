@@ -6,16 +6,27 @@ class CustomContainer extends StatelessWidget {
     Key? key,
     this.normalWeight = false,
     this.onTap,
-    this.right,
-    this.left,
+    this.rightPadding,
+    this.leftPadding,
     this.maxLines,
   }) : super(key: key);
 
+  // text to display
   final String _text;
+
+  // wether it is going to be normal weight or the bold weight
   final bool normalWeight;
+
+  // what to do onTap
   final Function()? onTap;
-  final double? right;
-  final double? left;
+
+  // right padding
+  final double? rightPadding;
+
+  // left padding
+  final double? leftPadding;
+
+  // maxlines to show in the container
   final int? maxLines;
 
   @override
@@ -26,8 +37,8 @@ class CustomContainer extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         margin: EdgeInsets.only(
           top: 20,
-          right: right ?? 20,
-          left: left ?? 20,
+          right: rightPadding ?? 20,
+          left: leftPadding ?? 20,
         ),
         decoration: BoxDecoration(
           color: const Color(0xFF616161),
@@ -37,7 +48,7 @@ class CustomContainer extends StatelessWidget {
           child: Text(
             _text,
             maxLines: maxLines,
-            overflow: maxLines != null ? TextOverflow.ellipsis : null,
+            overflow: maxLines != null ? TextOverflow.ellipsis : null, // if there is maxLines limit then add the overflow
             style: TextStyle(
               color: Colors.white,
               fontWeight: normalWeight ? FontWeight.normal : FontWeight.bold,

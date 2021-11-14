@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                               Expanded(
                                 child: CustomContainer(
                                   'COPY',
-                                  right: 10,
+                                  rightPadding: 10,
                                   onTap: () async {
                                     // copy the text
                                     await Clipboard.setData(
@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                                                       Provider.of<SavedScansProvider>(
                                                               context,
                                                               listen: false)
-                                                          .setData(
+                                                          .insert(
                                                         {
                                                           'id': UniqueKey()
                                                               .toString(),
@@ -221,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                                       },
                                     );
                                   },
-                                  left: 10,
+                                  leftPadding: 10,
                                 ),
                               )
                             ],
