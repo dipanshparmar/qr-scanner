@@ -91,7 +91,27 @@ class _SearchPageState extends State<SearchPage> {
             padding: const EdgeInsets.only(top: 20),
             itemCount: results.length,
             itemBuilder: (context, index) {
-              return SavedScanTile(results[index]);
+              return GestureDetector(
+                onTap: () async {
+                  await showModalBottomSheet(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
+                    ),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    context: context,
+                    builder: (context) {
+                      return OptionsModalSheetSaved(
+                        results[index],
+                        fromSearch: true,
+                      );
+                    },
+                  );
+                },
+                child: SavedScanTile(results[index]),
+              );
             },
           );
         },
