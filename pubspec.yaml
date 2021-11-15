@@ -66,7 +66,7 @@ flutter_native_splash:
   ios: false
   web: false
   color: "#ffffff"
-  image: "assets/images/icon-transparent.png"
+  image: "assets/images/native-front.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
