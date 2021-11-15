@@ -99,4 +99,15 @@ class SavedScansProvider with ChangeNotifier {
     // notifying the listeners
     notifyListeners();
   }
+
+  // method to provide the serch results
+  List<SavedScan> getSearchResults(String query) {
+    return _savedScans
+        .where(
+          (element) =>
+              element.title.toLowerCase().contains(query.toLowerCase()) ||
+              element.code.toLowerCase().contains(query.toLowerCase()),
+        )
+        .toList();
+  }
 }

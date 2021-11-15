@@ -23,6 +23,7 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -45,6 +46,20 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
           ),
         ],
       ),
+      floatingActionButton: _currentIndex == 1
+          ? FloatingActionButton(
+              backgroundColor: Theme.of(context).primaryColor,
+              child: const Icon(Icons.search),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchPage(),
+                  ),
+                );
+              },
+            )
+          : null,
     );
   }
 }
