@@ -54,7 +54,7 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SearchPage(),
+                    builder: (context) => const SearchPage(),
                   ),
                 );
               },
