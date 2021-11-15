@@ -48,9 +48,11 @@ class _SavedScansPageState extends State<SavedScansPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF9E9E9E),
-      body: FutureBuilder(
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      color: const Color(0xFFCFCFCF),
+      child: FutureBuilder(
         future: _future,
         builder: (context, snapshot) {
           // if loading
