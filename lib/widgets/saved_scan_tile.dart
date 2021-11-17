@@ -30,7 +30,7 @@ class SavedScanTile extends StatelessWidget {
         children: [
           // title
           Text(
-            _savedScan.title == '' ? 'No title!' : _savedScan.title,
+            _savedScan.title,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
               color: Colors.white70,

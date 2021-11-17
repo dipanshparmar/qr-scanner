@@ -214,7 +214,9 @@ class _OptionsModalSheetState extends State<OptionsModalSheet> {
     await Provider.of<SavedScansProvider>(context, listen: false).insert(
       {
         'id': UniqueKey().toString(),
-        'title': _textEditingController.text,
+        'title': _textEditingController.text == ''
+            ? 'No title!'
+            : _textEditingController.text,
         'code': widget._barcode.code!,
         'date': widget._date,
       },

@@ -46,7 +46,7 @@ class _OptionsModalSheetSavedState extends State<OptionsModalSheetSaved> {
       children: [
         // title container
         CustomContainer(
-          widget._savedScan.title == '' ? 'No title!' : widget._savedScan.title,
+          widget._savedScan.title,
           onTap: !widget.fromSearch
               ? () async {
                   await _buildUpdateTitleBottomSheet(context);
