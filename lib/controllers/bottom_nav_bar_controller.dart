@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // pages
 import '../pages/pages.dart';
+
+// providers
+import '../providers/providers.dart';
 
 class BottomNavBarController extends StatefulWidget {
   const BottomNavBarController({Key? key}) : super(key: key);
@@ -46,7 +50,8 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
           ),
         ],
       ),
-      floatingActionButton: _currentIndex == 1
+      floatingActionButton: _currentIndex == 1 &&
+              Provider.of<SavedScansProvider>(context).savedScans.isNotEmpty
           ? FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
               child: const Icon(Icons.search),
