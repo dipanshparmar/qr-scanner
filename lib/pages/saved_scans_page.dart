@@ -18,56 +18,31 @@ class SavedScansPage extends StatefulWidget {
 }
 
 class _SavedScansPageState extends State<SavedScansPage> {
-  // future that will hold the future that will load the saved scans
-  late Future _future;
-
-  @override
-  void initState() {
-    super.initState();
-    _future = Provider.of<SavedScansProvider>(context, listen: false)
-        .fetchSavedScans(); // fetching the data from the db
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       color: const Color(0xFFCFCFCF),
-      child: FutureBuilder(
-        future: _future,
-        builder: (context, snapshot) {
-          // if loading
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return _buildProgressIndicator();
-          } else {
-            // if error
-            if (snapshot.hasError) {
-              return _buildErrorText();
-            } else {
-              return SafeArea(
-                child: Consumer<SavedScansProvider>(
-                  builder: (context, obj, child) {
-                    // if there is no data then let the user know
-                    if (obj.savedScans.isEmpty) {
-                      return _buildEmptySavedScansMessage(context);
-                    }
-
-                    // if there are saved scans then build them
-                    return Column(
-                      children: [
-                        _buildDeleteAllButton(context, obj),
-                        Expanded(
-                          child: _buildSavedScans(obj),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              );
+      child: SafeArea(
+        child: Consumer<SavedScansProvider>(
+          builder: (context, obj, child) {
+            // if there is no data then let the user know
+            if (obj.savedScans.isEmpty) {
+              return _buildEmptySavedScansMessage(context);
             }
-          }
-        },
+
+            // if there are saved scans then build them
+            return Column(
+              children: [
+                _buildDeleteAllButton(context, obj),
+                Expanded(
+                  child: _buildSavedScans(obj),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

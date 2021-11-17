@@ -24,6 +24,21 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
     SavedScansPage(),
   ];
 
+  // method to fetch the data
+  Future<void> _fetchData() async {
+    //  getting the data from the database
+    await Provider.of<SavedScansProvider>(context, listen: false)
+        .fetchSavedScans();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // fetching the data
+    _fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
