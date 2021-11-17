@@ -65,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
           textAlignVertical: TextAlignVertical.center,
         ),
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: const Color(0xFF5C5C5C),
       ),
       body: Consumer<SavedScansProvider>(
         builder: (context, obj, child) {
