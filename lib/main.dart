@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
             selectionColor: Color(0xFF424242),
             selectionHandleColor: Color(0xFF212121),
           ),
+          fontFamily: 'Capriola',
         ),
         home: const BottomNavBarController(),
       ),
