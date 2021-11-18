@@ -4,7 +4,7 @@
     <!-- permissions -->
      <uses-permission android:name="android.permission.VIBRATE" />
    <application
-        android:label="QR Code Scanner"
+        android:label="QR Code Reader"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
