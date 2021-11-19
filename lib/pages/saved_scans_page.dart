@@ -162,20 +162,4 @@ class _SavedScansPageState extends State<SavedScansPage> {
       await obj.deleteAll();
     }
   }
-
-  // method to build the error text
-  Center _buildErrorText() {
-    return const Center(
-      child: Text('Something went wrong!'),
-    );
-  }
-
-  // method to build the progress indicator
-  Widget _buildProgressIndicator() {
-    return const Center(
-      child: CircularProgressIndicator(
-        color: Colors.grey,
-      ),
-    );
-  }
 }
