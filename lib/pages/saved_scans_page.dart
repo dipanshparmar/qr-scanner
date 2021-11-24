@@ -98,11 +98,7 @@ class _SavedScansPageState extends State<SavedScansPage> {
       onTap: () async => _deleteAllScans(obj),
       child: Container(
         padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.only(
-          top: 20,
-          right: 20,
-          left: 20,
-        ),
+        margin: const EdgeInsets.all(20),
         alignment: Alignment.center,
         width: double.infinity,
         decoration: BoxDecoration(
