@@ -58,7 +58,8 @@ class SavedScansProvider with ChangeNotifier {
 
   // getter to get the scans
   List<SavedScan> get savedScans {
-    return _savedScans.toList();
+    // sending the scans by reveresing them so that the newest come first
+    return _savedScans.reversed.toList();
   }
 
   // method to delete an item from the db
